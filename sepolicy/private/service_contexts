@@ -15,3 +15,6 @@ lmo_freeform                                u:object_r:lmo_freeform_service:s0
 
 # PIH
 pih_manager                                 u:object_r:pih_manager_service:s0
+
+# App Lock
+app_lock                                    u:object_r:app_lock_service:s0

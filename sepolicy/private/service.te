@@ -12,3 +12,6 @@ type lmo_freeform_service, system_api_service, system_server_service, service_ma
 
 # PIH
 type pih_manager_service, app_api_service, system_api_service, system_server_service, service_manager_type;
+
+# App Lock
+type app_lock_service, system_api_service, system_server_service, service_manager_type;

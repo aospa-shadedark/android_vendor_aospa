@@ -50,7 +50,7 @@ COMMON_LUNCH_CHOICES += \
     aospa_lahaina-userdebug \
     aospa_lito-userdebug \
     aospa_lmi-userdebug \
-    aospa_marble-userdebug \
+    aospa_marble-ap3a-user \
     aospa_mi439_419-userdebug \
     aospa_miatoll-userdebug \
     aospa_munch-userdebug \

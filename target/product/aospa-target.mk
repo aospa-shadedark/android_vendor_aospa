@@ -75,6 +75,11 @@ endif
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.config.media_vol_steps=30
 
+# BCR
+ifneq ($(TARGET_DISABLES_GMS), true)
+$(call inherit-product, vendor/bcr/bcr.mk)
+endif
+
 # Boot Animation
 $(call inherit-product, vendor/aospa/bootanimation/bootanimation.mk)
 

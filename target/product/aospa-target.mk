@@ -31,12 +31,18 @@ $(call inherit-product-if-exists, vendor/aospa-priv/target/product/aospa-priv-ta
 ifeq ($(TARGET_DISABLES_GMS), true)
 # Vanilla apps
 PRODUCT_PACKAGES += \
+    Contacts \
+    ContactsProvider \
     Dialer \
+    DeskClock \
     Etar \
     ExactCalculator \
     Glimpse \
     Jelly \
-    LatinIME
+    LatinIME \
+    messaging \
+    Recorder \
+    Twelve
 endif
 
 # APNs

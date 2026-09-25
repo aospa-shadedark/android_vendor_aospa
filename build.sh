@@ -17,6 +17,8 @@ CLR_BLD_CYA=$CLR_RST$CLR_BLD$(tput setaf 6) #  cyan, bold
 
 # Set defaults
 BUILD_TYPE="userdebug"
+AOSPA_BUILD_FLAVOR="gapps"
+TARGET_DISABLES_GMS=false
 
 function checkExit () {
     EXIT_CODE=$?
@@ -46,12 +48,13 @@ function showHelpAndExit {
         echo -e "${CLR_BLD_BLU}  -d, --delta           Generate a delta ota from the specified target_files zip${CLR_RST}"
         echo -e "${CLR_BLD_BLU}  -z, --imgzip          Generate fastboot flashable image zip from signed target_files${CLR_RST}"
         echo -e "${CLR_BLD_BLU}  -n, --version         Specify build minor version (number)${CLR_RST}"
+        echo -e "${CLR_BLD_BLU}  -l, --vanilla         Disable GMS for this build${CLR_RST}"
         exit 1
 }
 
 # Setup getopt.
-long_opts="help,clean,installclean,repo-sync,variant:,build-type:,jobs:,module:,sign-keys:,pwfile:,backup-unsigned,delta:,imgzip,version:"
-getopt_cmd=$(getopt -o hcirv:t:j:m:s:p:bd:zn: --long "$long_opts" \
+long_opts="help,clean,installclean,repo-sync,variant:,build-type:,jobs:,module:,sign-keys:,pwfile:,backup-unsigned,delta:,imgzip,version:,disable-gms"
+getopt_cmd=$(getopt -o hcirv:t:j:m:s:p:bd:zn:l --long "$long_opts" \
             -n $(basename $0) -- "$@") || \
             { echo -e "${CLR_BLD_RED}\nError: Getopt failed. Extra args\n${CLR_RST}"; showHelpAndExit; exit 1;}
 
@@ -73,6 +76,10 @@ while true; do
         -d|--delta|d|delta) DELTA_TARGET_FILES="$2"; shift;;
         -z|--imgzip|img|imgzip) FLAG_IMG_ZIP=y;;
         -n|--version|n|version) AOSPA_USER_VERSION="$2"; shift;;
+        -l|--vanilla|l|vanilla)
+    TARGET_DISABLES_GMS=true
+    AOSPA_BUILD_FLAVOR="vanilla"
+    ;;
         --) shift; break;;
     esac
     shift
@@ -84,6 +91,13 @@ if [ $# -eq 0 ]; then
     showHelpAndExit
 fi
 export DEVICE="$1"; shift
+
+# Set build flavor
+if [ "$AOSPA_BUILD_FLAVOR" = "vanilla" ]; then
+    export TARGET_DISABLES_GMS=true
+else
+    export TARGET_DISABLES_GMS=false
+fi
 
 # Make sure we are running on 64-bit before carrying on with anything
 ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
@@ -180,9 +194,16 @@ echo -e ""
 
 # Lunch-time!
 echo -e "${CLR_BLD_BLU}Lunching $DEVICE${CLR_RST} ${CLR_CYA}(Including dependencies sync)${CLR_RST}"
+if [ "$AOSPA_BUILD_FLAVOR" = "vanilla" ]; then
+export TARGET_DISABLES_GMS=true
+else
+    export TARGET_DISABLES_GMS=false
+fi
+
+echo -e "${CLR_CYA}Build flavor: ${AOSPA_BUILD_FLAVOR}${CLR_RST}"
 echo -e ""
 lunch "aospa_$DEVICE-$BUILD_TYPE"
-AOSPA_VERSION="$(get_build_var AOSPA_VERSION)"
+AOSPA_VERSION="$(get_build_var AOSPA_VERSION)-$AOSPA_BUILD_FLAVOR"
 TARGET_KERNEL_OUT="$DIR_ROOT/$(get_build_var KERNEL_PREBUILT_DIR)"
 TARGET_KERNEL_VERSION="$(get_build_var TARGET_KERNEL_VERSION)"
 checkExit

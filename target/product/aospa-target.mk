@@ -109,7 +109,8 @@ endif
 
 PRODUCT_DEXPREOPT_SPEED_APPS += \
     Launcher3QuickStep \
-    ParanoidSystemUI
+    ParanoidSystemUI \
+    Pentas
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.systemuicompilerfilter=speed
@@ -134,9 +135,9 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,vendor/aospa/fonts/,$(TARGET_COPY_OUT_PRODUCT)/fonts) \
     vendor/aospa/target/config/fonts_customization.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/fonts_customization.xml
 
-# GameSpace
+# Pentas
 PRODUCT_PACKAGES += \
-    GameSpace
+    Pentas
 
 # Gestures
 PRODUCT_PACKAGES += \

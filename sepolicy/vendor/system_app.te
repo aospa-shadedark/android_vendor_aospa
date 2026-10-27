@@ -3,3 +3,8 @@
 allow system_app vendor_sysfs_kgsl:lnk_file r_file_perms;
 allow system_app vendor_sysfs_battery_supply:dir r_dir_perms;
 allow system_app vendor_sysfs_battery_supply:file r_file_perms;
+
+# GPU telemetry on devices using generic KGSL labels.
+allow system_app vendor_sysfs_kgsl:dir r_dir_perms;
+allow system_app vendor_sysfs_kgsl:file r_file_perms;
+allow system_app vendor_sysfs_kgsl_gpuclk:file r_file_perms;
